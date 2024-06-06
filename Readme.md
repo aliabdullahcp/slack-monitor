@@ -8,7 +8,7 @@
 
 
 ### How to run
-1. Make sure you have python installed on your machine (See Here)[https://www.python.org/downloads/]
+1. Make sure you have python installed on your machine [See Here](https://www.python.org/downloads/)
 2. Rename the `.env.example` file to `.env` file.
 3. Update the `.env` files values with your desired Channel IDs and UserIDs
 4. Open the terminal/powershell in the same folder and run the following command
