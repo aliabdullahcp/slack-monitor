@@ -89,5 +89,10 @@ def get_user_message_counts(channel_id, user_ids):
 
 if __name__ == "__main__":
     for channel in SPECIFIED_CHANNELS:
-        print(get_user_message_counts(channel, USER_IDS))
+        data = get_user_message_counts(channel, USER_IDS)
+        print(f"Number of Message Sent to Channel ID: {channel} -> ")
+        for d in data.keys():
+            print(f"UserID: {d} sent: {data[d]} messages")
+        print("")
+
     # print(get_all_channels_and_groups())
