@@ -10,7 +10,7 @@ SLACK_TOKEN = os.getenv("SLACK_TOKEN")
 USER_IDS = json.loads(os.getenv("USER_IDS"))
 # List of specific public/private channels to fetch messages from
 SPECIFIED_CHANNELS = json.loads(os.getenv("SPECIFIED_CHANNELS"))
-
+SPECIFIED_DMS_AND_GROUPS = json.loads(os.getenv("SPECIFIED_DMS_AND_GROUPS"))
 # create the client
 client = WebClient(token=SLACK_TOKEN)
 
@@ -87,12 +87,40 @@ def get_user_message_counts(channel_id, user_ids):
     return user_message_counts
 
 
+def get_channel_name(channel_id):
+    try:
+        response = client.conversations_info(channel=channel_id)
+        channel_name = response['channel']['name']
+        return channel_name
+    except SlackApiError as e:
+        print(f"Error fetching channel name: {e.response['error']}")
+        return None
+
+
+def get_user_name(user_id):
+    try:
+        response = client.users_info(user=user_id)
+        user_name = response['user']['real_name']
+        return user_name
+    except SlackApiError as e:
+        print(f"Error fetching user name: {e.response['error']}")
+        return None
+
+
 if __name__ == "__main__":
     for channel in SPECIFIED_CHANNELS:
         data = get_user_message_counts(channel, USER_IDS)
-        print(f"Number of Message Sent to Channel ID: {channel} -> ")
+        print(f"Numbesr of Message Sent to Channel: {get_channel_name(channel)} ({channel}) -> ")
         for d in data.keys():
-            print(f"UserID: {d} sent: {data[d]} messages")
+            print(f"User: {get_user_name(d)} ({d})  sent: {data[d]} messages")
         print("")
-
+        
+        
+    for dm in SPECIFIED_DMS_AND_GROUPS:
+        data = get_user_message_counts(dm, USER_IDS)
+        print(f"Numbesr of Message Sent to DM: {dm} -> ")
+        for d in data.keys():
+            print(f"User: {get_user_name(d)} ({d})  sent: {data[d]} messages")
+        print("")
+        
     # print(get_all_channels_and_groups())
